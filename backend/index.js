@@ -204,6 +204,7 @@ const createGame = (player1Socket, player2Socket) => {
   newGame['idGame'] = uniqid();
   newGame['player1Socket'] = player1Socket;
   newGame['player2Socket'] = player2Socket;
+  newGame['isVsBot'] = false;
   
   // Initialisation des pions pour chaque joueur
   newGame.gameState.remainingPions = { 'player:1': 12, 'player:2': 12 };
