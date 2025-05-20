@@ -1,11 +1,11 @@
 // app/screens/vs-bot-game.screen.js
 
 import React, { useContext } from "react";
-import { StyleSheet, View, Button, Text } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { SocketContext } from '../contexts/socket.context';
+import VsBotGameController from "../controllers/vs-bot-game.controller";
 
 export default function VsBotGameScreen({ navigation }) {
-
     const socket = useContext(SocketContext);
 
     return (
@@ -13,27 +13,16 @@ export default function VsBotGameScreen({ navigation }) {
             {!socket && (
                 <>
                     <Text style={styles.paragraph}>
-                        No connection with server...
+                        Pas de connexion avec le serveur...
                     </Text>
                     <Text style={styles.footnote}>
-                        Restart the app and wait for the server to be back again.
+                        Redémarrez l'application et attendez que le serveur soit de nouveau disponible.
                     </Text>
                 </>
             )}
 
             {socket && (
-                <>
-                    <Text style={styles.paragraph}>
-                        VsBot Game Interface
-                    </Text>
-                    <Text style={styles.footnote}>
-                        My socket id is: {socket.id}
-                    </Text>
-                    <Button
-                        title="Revenir au menu"
-                        onPress={() => navigation.navigate('HomeScreen')}
-                    />
-                </>
+                <VsBotGameController navigation={navigation}/>
             )}
         </View>
     );

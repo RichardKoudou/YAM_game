@@ -125,18 +125,20 @@ const GameService = {
     send: {
         forPlayer: {
             viewGameState: (playerKey, game) => {
-                return {
+                const gameState = {
                     inQueue: false,
                     inGame: true,
-                    idPlayer:
-                        (playerKey === 'player:1')
-                            ? game.player1Socket.id
-                            : game.player2Socket.id,
-                    idOpponent:
-                        (playerKey === 'player:1')
-                            ? game.player2Socket.id
-                            : game.player1Socket.id
+                    idPlayer: game.player1Socket ? game.player1Socket.id : null
                 };
+
+                // Gestion spécifique pour le mode bot
+                if (game.isVsBot) {
+                    gameState.idOpponent = 'bot';
+                } else {
+                    gameState.idOpponent = game.player2Socket ? game.player2Socket.id : null;
+                }
+
+                return gameState;
             },
 
             viewQueueState: () => {
@@ -494,8 +496,13 @@ const GameService = {
 
         findGameIndexBySocketId: (games, socketId) => {
             for (let i = 0; i < games.length; i++) {
-                if (games[i].player1Socket.id === socketId || games[i].player2Socket.id === socketId) {
-                    return i; // Retourne l'index du jeu si le socket est trouvé
+                const game = games[i];
+                if (!game || !game.player1Socket) continue;
+                
+                if (game.player1Socket.id === socketId || 
+                    (game.player2Socket && game.player2Socket.id === socketId) || 
+                    (game.isVsBot && game.player1Socket.id === socketId)) {
+                    return i;
                 }
             }
             return -1;

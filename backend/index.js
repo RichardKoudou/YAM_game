@@ -3,6 +3,9 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 var uniqid = require('uniqid');
 const GameService = require('./services/game.service');
+const BotService = require('./services/bot.service');
+
+console.log('Serveur démarré avec support du mode VS Bot');
 
 // ---------------------------------------------------
 // -------- CONSTANTS AND GLOBAL VARIABLES -----------
@@ -15,34 +18,136 @@ let queue = [];
 // ------------------------------------
 
 const updateClientsViewTimers = (game) => {
-  game.player1Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:1', game.gameState));
-  game.player2Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:2', game.gameState));
+  // Toujours envoyer les mises à jour au joueur 1
+  if (game.player1Socket) {
+    game.player1Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:1', game.gameState));
+  }
+  
+  // Envoyer les mises à jour au joueur 2 uniquement s'il existe et si ce n'est pas un bot
+  if (!game.isVsBot && game.player2Socket) {
+    game.player2Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:2', game.gameState));
+  }
 };
 
 const updateClientsViewDecks = (game) => {
   setTimeout(() => {
-    game.player1Socket.emit('game.deck.view-state', GameService.send.forPlayer.deckViewState('player:1', game.gameState));
-    game.player2Socket.emit('game.deck.view-state', GameService.send.forPlayer.deckViewState('player:2', game.gameState));
+    // Toujours envoyer les mises à jour au joueur 1
+    if (game.player1Socket) {
+      game.player1Socket.emit('game.deck.view-state', GameService.send.forPlayer.deckViewState('player:1', game.gameState));
+    }
+    
+    // Envoyer les mises à jour au joueur 2 uniquement s'il existe et si ce n'est pas un bot
+    if (!game.isVsBot && game.player2Socket) {
+      game.player2Socket.emit('game.deck.view-state', GameService.send.forPlayer.deckViewState('player:2', game.gameState));
+    }
   }, 200);
 };
 
 const updateClientsViewChoices = (game) => {
   setTimeout(() => {
-    game.player1Socket.emit('game.choices.view-state', GameService.send.forPlayer.choicesViewState('player:1', game.gameState));
-    game.player2Socket.emit('game.choices.view-state', GameService.send.forPlayer.choicesViewState('player:2', game.gameState));
+    // Toujours envoyer les mises à jour au joueur 1
+    if (game.player1Socket) {
+      game.player1Socket.emit('game.choices.view-state', GameService.send.forPlayer.choicesViewState('player:1', game.gameState));
+    }
+    
+    // Envoyer les mises à jour au joueur 2 uniquement s'il existe et si ce n'est pas un bot
+    if (!game.isVsBot && game.player2Socket) {
+      game.player2Socket.emit('game.choices.view-state', GameService.send.forPlayer.choicesViewState('player:2', game.gameState));
+    }
   }, 200);
 }
 
 const updateClientsViewGrid = (game) => {
   setTimeout(() => {
-    game.player1Socket.emit('game.grid.view-state', GameService.send.forPlayer.gridViewState('player:1', game.gameState));
-    game.player2Socket.emit('game.grid.view-state', GameService.send.forPlayer.gridViewState('player:2', game.gameState));
-  }, 200)
+    // Toujours envoyer les mises à jour au joueur 1
+    if (game.player1Socket) {
+      game.player1Socket.emit('game.grid.view-state', GameService.send.forPlayer.gridViewState('player:1', game.gameState));
+    }
+    
+    // Envoyer les mises à jour au joueur 2 uniquement s'il existe et si ce n'est pas un bot
+    if (!game.isVsBot && game.player2Socket) {
+      game.player2Socket.emit('game.grid.view-state', GameService.send.forPlayer.gridViewState('player:2', game.gameState));
+    }
+  }, 200);
 }
 
 // ---------------------------------
 // -------- GAME METHODS -----------
 // ---------------------------------
+
+const createGameVsBot = (playerSocket) => {
+  console.log('[BOT] Création d\'une nouvelle partie contre le bot');
+  
+  // Initialisation de la partie comme pour le mode en ligne
+  const newGame = GameService.init.gameState();
+  newGame['idGame'] = uniqid();
+  newGame['player1Socket'] = playerSocket;
+  newGame['player2Socket'] = null; // Le bot n'a pas de socket
+  newGame['isVsBot'] = true;
+  
+  // Initialisation des pions et scores
+  newGame.gameState.remainingPions = { 'player:1': 12, 'player:2': 12 };
+  newGame.gameState.scores = { 'player:1': 0, 'player:2': 0 };
+
+  games.push(newGame);
+
+  const gameIndex = GameService.utils.findGameIndexById(games, newGame.idGame);
+
+  // Notification du début de partie
+  console.log('[BOT] Envoi de l\'état initial au joueur');
+  games[gameIndex].player1Socket.emit('game.start', GameService.send.forPlayer.viewGameState('player:1', games[gameIndex]));
+
+  // Envoi des états initiaux
+  games[gameIndex].player1Socket.emit('game.tokens.update', games[gameIndex].gameState.remainingPions);
+  games[gameIndex].player1Socket.emit('game.scores.update', games[gameIndex].gameState.scores);
+
+  // Mise à jour des vues
+  updateClientsViewTimers(games[gameIndex]);
+  updateClientsViewDecks(games[gameIndex]);
+  updateClientsViewGrid(games[gameIndex]);
+
+  // Timer pour le tour
+  const gameInterval = setInterval(async () => {
+    games[gameIndex].gameState.timer--;
+    updateClientsViewTimers(games[gameIndex]);
+
+    if (games[gameIndex].gameState.timer === 0) {
+      console.log('[BOT] Fin du tour, changement de joueur');
+      
+      // Changement de tour
+      games[gameIndex].gameState.currentTurn = games[gameIndex].gameState.currentTurn === 'player:1' ? 'player:2' : 'player:1';
+      games[gameIndex].gameState.timer = GameService.timer.getTurnDuration();
+
+      // Réinitialisation des états
+      games[gameIndex].gameState.deck = GameService.init.deck();
+      games[gameIndex].gameState.choices = GameService.init.choices();
+      games[gameIndex].gameState.grid = GameService.grid.resetcanBeCheckedCells(games[gameIndex].gameState.grid);
+
+      // Mise à jour des vues
+      updateClientsViewTimers(games[gameIndex]);
+      updateClientsViewDecks(games[gameIndex]);
+      updateClientsViewChoices(games[gameIndex]);
+      updateClientsViewGrid(games[gameIndex]);
+
+      // Si c'est le tour du bot
+      if (games[gameIndex].gameState.currentTurn === 'player:2') {
+        console.log('[BOT] Tour du bot');
+        games[gameIndex].gameState = await BotService.action.playTurn(games[gameIndex].gameState);
+        
+        // Mise à jour des vues après le tour du bot
+        updateClientsViewDecks(games[gameIndex]);
+        updateClientsViewChoices(games[gameIndex]);
+        updateClientsViewGrid(games[gameIndex]);
+      }
+    }
+  }, 1000);
+
+  // Nettoyage à la déconnexion
+  playerSocket.on('disconnect', () => {
+    console.log('[BOT] Déconnexion du joueur, fin de la partie');
+    clearInterval(gameInterval);
+  });
+};
 
 const createGame = (player1Socket, player2Socket) => {
 
@@ -124,16 +229,16 @@ const createGame = (player1Socket, player2Socket) => {
 };
 
 const newPlayerInQueue = (socket) => {
-
+  // Ajouter le joueur à la file d'attente
   queue.push(socket);
 
-  // 'queue' management
+  // Si deux joueurs sont en attente, créer une partie multijoueur
   if (queue.length >= 2) {
     const player1Socket = queue.shift();
     const player2Socket = queue.shift();
     createGame(player1Socket, player2Socket);
-  }
-  else {
+  } else {
+    // Informer le joueur qu'il est en attente d'un adversaire
     socket.emit('queue.added', GameService.send.forPlayer.viewQueueState());
   }
 };
@@ -147,8 +252,13 @@ io.on('connection', socket => {
   console.log(`[${socket.id}] socket connected`);
 
   socket.on('queue.join', () => {
-    console.log(`[${socket.id}] new player in queue `)
+    console.log(`[${socket.id}] Nouveau joueur dans la file d'attente`);
     newPlayerInQueue(socket);
+  });
+
+  socket.on('game.vs-bot.start', () => {
+    console.log(`[${socket.id}] Démarrage d'une partie contre le bot`);
+    createGameVsBot(socket);
   });
 
   socket.on('game.dices.roll', () => {
@@ -231,9 +341,22 @@ io.on('connection', socket => {
   });
 
   socket.on('game.grid.selected', (data) => {
-
     const gameIndex = GameService.utils.findGameIndexBySocketId(games, socket.id);
+    
+    // Vérification de l'existence du jeu
+    if (gameIndex === -1 || !games[gameIndex]) {
+      console.log('[ERROR] Jeu non trouvé pour le socket:', socket.id);
+      return;
+    }
+
     const game = games[gameIndex];
+    
+    // Vérification de l'existence de gameState
+    if (!game.gameState) {
+      console.log('[ERROR] État du jeu non défini pour le jeu:', game.idGame);
+      return;
+    }
+
     const currentPlayer = game.gameState.currentTurn; // 'player:1' ou 'player:2'
 
     // Mise à jour de la grille
@@ -271,7 +394,7 @@ io.on('connection', socket => {
     }
     game.gameState.remainingPions[currentPlayer]--;
 
-    // Vérifier si un joueur n’a plus de pions ou s’il y a un gagnant
+    // Vérifier si un joueur n'a plus de pions ou s'il y a un gagnant
     if (game.gameState.remainingPions[currentPlayer] === 0 || game.gameState.winner) {
       // Fin de la partie : déterminer gagnant si pas de gagnant instantané
       if (!game.gameState.winner) {
@@ -284,9 +407,11 @@ io.on('connection', socket => {
         }
       }
 
-      // Émettre fin de partie
+      // Émettre fin de partie uniquement au joueur 1 en mode bot
       game.player1Socket.emit('game.end', { winner: game.gameState.winner, scores: game.gameState.scores });
-      game.player2Socket.emit('game.end', { winner: game.gameState.winner, scores: game.gameState.scores });
+      if (!game.isVsBot && game.player2Socket) {
+        game.player2Socket.emit('game.end', { winner: game.gameState.winner, scores: game.gameState.scores });
+      }
 
       return; // Stop further processing
     }
@@ -299,16 +424,23 @@ io.on('connection', socket => {
     game.gameState.deck = GameService.init.deck();
     game.gameState.choices = GameService.init.choices();
 
+    // Émettre les mises à jour uniquement aux sockets existants
     game.player1Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:1', game.gameState));
-    game.player2Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:2', game.gameState));
+    if (!game.isVsBot && game.player2Socket) {
+      game.player2Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:2', game.gameState));
+    }
 
-    // Émettre scores à jour et grille
+    // Émettre scores à jour
     game.player1Socket.emit('game.scores.update', game.gameState.scores);
-    game.player2Socket.emit('game.scores.update', game.gameState.scores);
+    if (!game.isVsBot && game.player2Socket) {
+      game.player2Socket.emit('game.scores.update', game.gameState.scores);
+    }
 
     // Émettre l'état des pions restants
     game.player1Socket.emit('game.tokens.update', game.gameState.remainingPions);
-    game.player2Socket.emit('game.tokens.update', game.gameState.remainingPions);
+    if (!game.isVsBot && game.player2Socket) {
+      game.player2Socket.emit('game.tokens.update', game.gameState.remainingPions);
+    }
 
     updateClientsViewDecks(game);
     updateClientsViewChoices(game);
