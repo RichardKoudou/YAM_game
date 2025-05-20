@@ -80,6 +80,7 @@ const BotService = {
                 
                 // Lance les dés non verrouillés
                 gameState.deck.dices = GameService.dices.roll(gameState.deck.dices);
+                // Les mises à jour des vues sont gérées par le code appelant
 
                 // Analyse les combinaisons disponibles
                 const combinations = GameService.choices.findCombinations(
@@ -100,6 +101,7 @@ const BotService = {
                         ...gameState.deck.dices[index],
                         locked: dice.shouldLock
                     }));
+                    // Les mises à jour des vues sont gérées par le code appelant
                 }
 
                 gameState.deck.rollsCounter++;
@@ -121,6 +123,7 @@ const BotService = {
                 const bestCombination = BotService.decision.chooseBestCombination(finalCombinations, gameState.grid);
                 gameState.choices.availableChoices = finalCombinations;
                 gameState.choices.idSelectedChoice = bestCombination.id;
+                // Les mises à jour des vues sont gérées par le code appelant
 
                 // Met à jour la grille avec les cellules disponibles
                 gameState.grid = GameService.grid.updateGridAfterSelectingChoice(
@@ -148,6 +151,7 @@ const BotService = {
                         'player:2',
                         gameState.grid
                     );
+                    // Les mises à jour des vues sont gérées par le code appelant
 
                     // Met à jour le score
                     const result = GameService.grid.updateScore(

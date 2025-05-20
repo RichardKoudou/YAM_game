@@ -18,26 +18,48 @@ let queue = [];
 // ------------------------------------
 
 const updateClientsViewTimers = (game) => {
-  // Toujours envoyer les mises à jour au joueur 1
+  // Vérifier si le jeu et son état existent
+  if (!game || !game.gameState) {
+    console.log('[ERROR] Jeu ou état du jeu non défini');
+    return;
+  }
+
+  // Toujours envoyer les mises à jour au joueur 1 s'il existe
   if (game.player1Socket) {
     game.player1Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:1', game.gameState));
   }
   
-  // Envoyer les mises à jour au joueur 2 uniquement s'il existe et si ce n'est pas un bot
-  if (!game.isVsBot && game.player2Socket) {
+  // En mode bot, ne pas essayer d'émettre au joueur 2
+  if (game.isVsBot) {
+    return;
+  }
+  
+  // En mode multijoueur, émettre au joueur 2 s'il existe
+  if (game.player2Socket) {
     game.player2Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:2', game.gameState));
   }
 };
 
 const updateClientsViewDecks = (game) => {
   setTimeout(() => {
-    // Toujours envoyer les mises à jour au joueur 1
+    // Vérifier si le jeu et son état existent
+    if (!game || !game.gameState) {
+      console.log('[ERROR] Jeu ou état du jeu non défini');
+      return;
+    }
+
+    // Toujours envoyer les mises à jour au joueur 1 s'il existe
     if (game.player1Socket) {
       game.player1Socket.emit('game.deck.view-state', GameService.send.forPlayer.deckViewState('player:1', game.gameState));
     }
     
-    // Envoyer les mises à jour au joueur 2 uniquement s'il existe et si ce n'est pas un bot
-    if (!game.isVsBot && game.player2Socket) {
+    // En mode bot, ne pas essayer d'émettre au joueur 2
+    if (game.isVsBot) {
+      return;
+    }
+    
+    // En mode multijoueur, émettre au joueur 2 s'il existe
+    if (game.player2Socket) {
       game.player2Socket.emit('game.deck.view-state', GameService.send.forPlayer.deckViewState('player:2', game.gameState));
     }
   }, 200);
@@ -45,13 +67,24 @@ const updateClientsViewDecks = (game) => {
 
 const updateClientsViewChoices = (game) => {
   setTimeout(() => {
-    // Toujours envoyer les mises à jour au joueur 1
+    // Vérifier si le jeu et son état existent
+    if (!game || !game.gameState) {
+      console.log('[ERROR] Jeu ou état du jeu non défini');
+      return;
+    }
+
+    // Toujours envoyer les mises à jour au joueur 1 s'il existe
     if (game.player1Socket) {
       game.player1Socket.emit('game.choices.view-state', GameService.send.forPlayer.choicesViewState('player:1', game.gameState));
     }
     
-    // Envoyer les mises à jour au joueur 2 uniquement s'il existe et si ce n'est pas un bot
-    if (!game.isVsBot && game.player2Socket) {
+    // En mode bot, ne pas essayer d'émettre au joueur 2
+    if (game.isVsBot) {
+      return;
+    }
+    
+    // En mode multijoueur, émettre au joueur 2 s'il existe
+    if (game.player2Socket) {
       game.player2Socket.emit('game.choices.view-state', GameService.send.forPlayer.choicesViewState('player:2', game.gameState));
     }
   }, 200);
@@ -59,13 +92,24 @@ const updateClientsViewChoices = (game) => {
 
 const updateClientsViewGrid = (game) => {
   setTimeout(() => {
-    // Toujours envoyer les mises à jour au joueur 1
+    // Vérifier si le jeu et son état existent
+    if (!game || !game.gameState) {
+      console.log('[ERROR] Jeu ou état du jeu non défini');
+      return;
+    }
+
+    // Toujours envoyer les mises à jour au joueur 1 s'il existe
     if (game.player1Socket) {
       game.player1Socket.emit('game.grid.view-state', GameService.send.forPlayer.gridViewState('player:1', game.gameState));
     }
     
-    // Envoyer les mises à jour au joueur 2 uniquement s'il existe et si ce n'est pas un bot
-    if (!game.isVsBot && game.player2Socket) {
+    // En mode bot, ne pas essayer d'émettre au joueur 2
+    if (game.isVsBot) {
+      return;
+    }
+    
+    // En mode multijoueur, émettre au joueur 2 s'il existe
+    if (game.player2Socket) {
       game.player2Socket.emit('game.grid.view-state', GameService.send.forPlayer.gridViewState('player:2', game.gameState));
     }
   }, 200);
@@ -264,6 +308,12 @@ io.on('connection', socket => {
   socket.on('game.dices.roll', () => {
     const gameIndex = GameService.utils.findGameIndexBySocketId(games, socket.id);
 
+    // Vérification de l'existence du jeu et de son état
+    if (gameIndex === -1 || !games[gameIndex] || !games[gameIndex].gameState) {
+      console.log('[ERROR] Jeu ou état du jeu non trouvé pour le socket:', socket.id);
+      return;
+    }
+
     if (games[gameIndex].gameState.deck.rollsCounter < games[gameIndex].gameState.deck.rollsMaximum) {
       // si ce n'est pas le dernier lancé
 
@@ -307,7 +357,9 @@ io.on('connection', socket => {
         games[gameIndex].gameState.timer = 5;
 
         games[gameIndex].player1Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:1', games[gameIndex].gameState));
-        games[gameIndex].player2Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:2', games[gameIndex].gameState));
+        if (!games[gameIndex].isVsBot && games[gameIndex].player2Socket) {
+          games[gameIndex].player2Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:2', games[gameIndex].gameState));
+        }
       }
 
       updateClientsViewDecks(games[gameIndex]);
