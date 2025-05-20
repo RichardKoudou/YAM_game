@@ -360,27 +360,62 @@ const GameService = {
             // Compter l'alignement max de ce joueur sur cette case
             const alignmentCount = GameService.grid.countAlignment(newGrid, rowIndex, cellIndex, currentTurn);
 
-            // Mettre à jour le score (exemple : +alignmentCount points)
-            gameState.scores[currentTurn] += alignmentCount;
+            // Mettre à jour les points en fonction de l'alignement
+            if (alignmentCount >= 3) {
+                if (alignmentCount === 3) {
+                    gameState.scores[currentTurn] += 1;
+                } else if (alignmentCount === 4) {
+                    gameState.scores[currentTurn] += 2;
+                }
+            }
 
-            // Mettre à jour la grille et scores dans gameState
+            // Mettre à jour la grille dans gameState
             gameState.grid = newGrid;
 
             // Décrémenter les pions restants
             gameState.remainingPions[currentTurn]--;
 
-            // Vérifier fin de partie (exemple : plus de pions pour l'un des joueurs)
-            if (gameState.remainingPions[currentTurn] <= 0) {
-            gameState.winner = (gameState.scores['player:1'] > gameState.scores['player:2'])
-                ? 'player:1'
-                : (gameState.scores['player:1'] < gameState.scores['player:2'] ? 'player:2' : 'draw');
+            // Vérifier les conditions de victoire
+            let gameOver = false;
+            let winner = null;
+            let winReason = null;
 
-            // Emettre un événement 'game.end' à tous les clients avec le résultat
-            // Par exemple via socket.emit('game.end', { winner: gameState.winner, scores: gameState.scores });
+            // Vérifier si un alignement de 5 a été réalisé (victoire instantanée)
+            if (alignmentCount === 5) {
+                gameOver = true;
+                winner = currentTurn;
+                winReason = 'alignment';
+            }
+            
+            // Vérifier si un joueur n'a plus de pions
+            if (!gameOver && (gameState.remainingPions['player:1'] <= 0 || gameState.remainingPions['player:2'] <= 0)) {
+                gameOver = true;
+                // Déterminer le gagnant en fonction des scores
+                if (gameState.scores['player:1'] > gameState.scores['player:2']) {
+                    winner = 'player:1';
+                } else if (gameState.scores['player:1'] < gameState.scores['player:2']) {
+                    winner = 'player:2';
+                } else {
+                    winner = 'draw';
+                }
+                winReason = 'no_tokens';
             }
 
-            // Emettre un événement 'game.scores.update' pour informer les clients
-            // socket.emit('game.scores.update', gameState.scores);
+            // Si la partie est terminée, mettre à jour le gagnant dans gameState
+            if (gameOver) {
+                gameState.winner = winner;
+                return {
+                    gameOver: true,
+                    winner: winner,
+                    winReason: winReason,
+                    scores: gameState.scores
+                };
+            }
+
+            return {
+                gameOver: false,
+                scores: gameState.scores
+            };
         },
 
         isAnyCombinationAvailableOnGridForPlayer: (gameState) => {
