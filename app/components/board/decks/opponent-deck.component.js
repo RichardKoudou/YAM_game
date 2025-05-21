@@ -1,7 +1,8 @@
 // app/components/board/decks/opponent-deck.component.js
 
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
+import { colors, typography, spacing, borderRadius, shadows } from '../../../styles/theme';
 import { SocketContext } from "../../../contexts/socket.context";
 import Dice from "./dice.component";
 
@@ -42,14 +43,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 4,
-    borderColor: "black"
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    margin: spacing.sm,
+    padding: spacing.md,
+    opacity: 0.9,
+    ...Platform.select({
+      ios: shadows.lg,
+      android: { elevation: 8 },
+      web: shadows.lg
+    })
   },
   diceContainer: {
     flexDirection: "row",
-    width: "70%",
-    justifyContent: "space-between",
-    marginBottom: 15,
+    width: "80%",
+    justifyContent: "space-around",
+    flexWrap: "wrap",
+    marginBottom: spacing.md,
   },
 });
 

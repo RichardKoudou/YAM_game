@@ -1,7 +1,8 @@
 // app/components/board/decks/dice.component.js
 
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from "react-native";
+import { colors, typography, spacing, borderRadius, shadows } from '../../../styles/theme';
 
 const Dice = ({ index, locked, value, onPress, opponent }) => {
 
@@ -24,24 +25,31 @@ const Dice = ({ index, locked, value, onPress, opponent }) => {
 
 const styles = StyleSheet.create({
   dice: {
-    width: 40,
-    height: 40,
-    backgroundColor: "#405DE6",
-    borderRadius: 5,
+    width: 45,
+    height: 45,
+    backgroundColor: colors.primary,
+    borderRadius: borderRadius.lg,
     justifyContent: "center",
     alignItems: "center",
+    margin: spacing.xs,
+    ...Platform.select({
+      ios: shadows.md,
+      android: { elevation: 4 },
+      web: shadows.md
+    })
   },
   lockedDice: {
     backgroundColor: "gray",
+    transform: [{ scale: 0.95 }]
   },
   diceText: {
-    fontSize: 20,
-    color: "white",
-    fontWeight: "bold",
+    ...typography.h3,
+    color: colors.text.light,
+    fontWeight: "bold"
   },
   opponentText: {
-    fontSize: 12,
-    color: "red",
+    ...typography.caption,
+    color: colors.error,
   },
 });
 

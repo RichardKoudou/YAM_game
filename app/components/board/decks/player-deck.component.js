@@ -1,7 +1,8 @@
 // app/components/board/decks/player-deck.component.js
 
 import React, { useState, useContext, useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
+import { colors, typography, spacing, borderRadius, shadows } from '../../../styles/theme';
 import { SocketContext } from "../../../contexts/socket.context";
 import Dice from "./dice.component";
 
@@ -92,34 +93,55 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderColor: "black"
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    margin: spacing.sm,
+    padding: spacing.md,
+    ...Platform.select({
+      ios: shadows.lg,
+      android: { elevation: 8 },
+      web: shadows.lg
+    })
   },
   rollInfoContainer: {
-    marginBottom: 10,
+    marginBottom: spacing.md,
+    padding: spacing.sm,
+    backgroundColor: colors.background,
+    borderRadius: borderRadius.md,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: { elevation: 2 },
+      web: shadows.sm
+    })
   },
   rollInfoText: {
-    fontSize: 14,
-    fontStyle: "italic",
+    ...typography.body,
+    color: colors.text.secondary,
+    textAlign: "center"
   },
   diceContainer: {
     flexDirection: "row",
-    width: "70%",
-    justifyContent: "space-between",
-    marginBottom: 10,
+    width: "80%",
+    justifyContent: "space-around",
+    flexWrap: "wrap",
+    marginBottom: spacing.md,
   },
   rollButton: {
-    width: "30%",
-    backgroundColor: "#405DE6",
-    paddingVertical: 20,
-    borderRadius: 5,
+    width: "40%",
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.xl,
     justifyContent: "center",
     alignItems: "center",
-    //backgroundColor: "black"
+    ...Platform.select({
+      ios: shadows.md,
+      android: { elevation: 4 },
+      web: shadows.md
+    })
   },
   rollButtonText: {
-    fontSize: 18,
-    color: "white",
+    ...typography.button,
+    color: colors.text.light,
     fontWeight: "bold",
   },
 });
