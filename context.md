@@ -54,3 +54,7 @@ lieu d’en poser un des siens.
 La partie s’achève lorsqu’un des joueurs n’a plus de pions (le joueur avec le plus de points est alors le vainqueur, les
 joueurs commencent la partie avec 12 pions à leur disposition) ou lorsqu’un des joueurs réalise un alignement de cinq
 pions (il gagne instantanément la partie).
+
+## Développement du mode "VS Bot"
+    - Vous utiliserez le socle existant pour coder le mode Vs-Bot.
+    - Ce mode de jeu sera au maximum factorisé avec le mode de jeu en ligne (besoin d'un nouveau createGameVsBot mais beaucoup de méthodes peuvent être réutilisées).

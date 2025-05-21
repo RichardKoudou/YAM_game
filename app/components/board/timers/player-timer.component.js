@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.surface,
         borderRadius: borderRadius.md,
         padding: spacing.sm,
-        minWidth: 30,
+        minWidth: 60,
         alignItems: 'center',
         justifyContent: 'center',
         ...Platform.select({
