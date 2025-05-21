@@ -40,7 +40,7 @@ const BotService = {
         chooseBestCombination: (availableChoices, grid) => {
             console.log('[BOT] Choix de la meilleure combinaison:', availableChoices);
             // Priorité aux combinaisons plus fortes
-            const priorities = ['yam', 'carre', 'full', 'brelan', 'suite', 'moinshuit'];
+            const priorities = ['yam', 'carre', 'full', 'suite', 'moinshuit', 'brelan', 'sec', 'defi'];
             
             for (const priority of priorities) {
                 const choice = availableChoices.find(c => c.id.toLowerCase().includes(priority));
@@ -90,7 +90,7 @@ const BotService = {
                 );
 
                 // Si on trouve une bonne combinaison, on arrête les lancers
-                if (combinations.some(c => ['yam', 'carre', 'full'].includes(c.id))) {
+                if (combinations.some(c => ['yam', 'carre', 'full', 'suite', 'moinshuit', 'brelan1', 'brelan2', 'brelan3', 'brelan4', 'brelan5', 'brelan6', 'sec', 'defi'].includes(c.id))) {
                     break;
                 }
 
