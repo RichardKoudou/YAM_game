@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   dice: {
     width: 40,
     height: 40,
-    backgroundColor: "lightblue",
+    backgroundColor: "#405DE6",
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   },
   diceText: {
     fontSize: 20,
+    color: "white",
     fontWeight: "bold",
   },
   opponentText: {

@@ -42,14 +42,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 1,
+    borderBottomWidth: 4,
     borderColor: "black"
   },
   diceContainer: {
     flexDirection: "row",
     width: "70%",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 15,
   },
 });
 

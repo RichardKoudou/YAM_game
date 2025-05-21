@@ -1,6 +1,7 @@
 import React, {useEffect, useContext, useState} from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import { SocketContext } from "../../../contexts/socket.context";
+import { colors, typography, spacing, borderRadius, shadows } from '../../../styles/theme';
 
 const Grid = () => {
 
@@ -67,6 +68,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        padding: spacing.sm,
+        backgroundColor: colors.surface,
     },
     row: {
         flexDirection: "row",
@@ -74,6 +77,7 @@ const styles = StyleSheet.create({
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
+        marginVertical: spacing.xxs,
     },
     cell: {
         flexDirection: "row",
@@ -83,27 +87,39 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderWidth: 1,
-        borderColor: "black",
+        borderColor: colors.border,
+        borderRadius: borderRadius.sm,
+        margin: spacing.xxs,
+        backgroundColor: colors.surface,
+        ...Platform.select({
+            ios: shadows.sm,
+            android: { elevation: 2 },
+            web: shadows.sm
+        })
     },
     cellText: {
-        fontSize: 11,
+        ...typography.body,
+        fontStyle:"bold",
+        color: colors.text.primary,
     },
     playerOwnedCell: {
-        backgroundColor: "lightgreen",
+        backgroundColor: colors.success,
         opacity: 0.9,
     },
     opponentOwnedCell: {
-        backgroundColor: "lightcoral",
+        backgroundColor: colors.danger,
         opacity: 0.9,
     },
     canBeCheckedCell: {
-        backgroundColor: "lightyellow",
+        backgroundColor: colors.warning,
     },
     topBorder: {
         borderTopWidth: 1,
+        borderTopColor: colors.border,
     },
     leftBorder: {
         borderLeftWidth: 1,
+        borderLeftColor: colors.border,
     },
 });
 

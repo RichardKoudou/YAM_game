@@ -4,7 +4,7 @@ export const colors = {
     primary: '#405DE6',  // Bleu Instagram
     secondary: '#5851DB', // Violet Instagram
     accent: '#833AB4',    // Violet foncé Instagram
-    success: '#2ecc71',   // Vert pour les actions réussies
+    success: '#5851DB',   // Vert pour les actions réussies
     warning: '#f1c40f',   // Jaune pour les avertissements
     danger: '#e74c3c',    // Rouge pour les erreurs/dangers
     background: '#FAFAFA', // Fond clair Instagram
