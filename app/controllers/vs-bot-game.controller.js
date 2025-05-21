@@ -1,10 +1,11 @@
 // app/controllers/vs-bot-game.controller.js
 
 import React, { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Platform } from "react-native";
 import { SocketContext } from '../contexts/socket.context';
 import Board from "../components/board/board.component";
 import GameSummary from "../components/game-summary/game-summary.component";
+import { colors, typography, spacing, borderRadius, shadows } from '../styles/theme';
 
 export default function VsBotGameController({ navigation }) {
     const socket = useContext(SocketContext);
@@ -37,7 +38,7 @@ export default function VsBotGameController({ navigation }) {
         <View style={styles.container}>
             {!inGame && !gameOver && (
                 <>
-                    <Text style={styles.paragraph}>
+                    <Text style={styles.message}>
                         Initialisation de la partie contre le bot...
                     </Text>
                 </>
@@ -52,11 +53,13 @@ export default function VsBotGameController({ navigation }) {
             {gameOver && (
                 <>
                     <GameSummary winner={winner} scores={finalScores} />
-                    <Button
-                        title="Retour à l'accueil"
+                    <TouchableOpacity
+                        style={[styles.button, styles.primaryButton]}
                         onPress={() => navigation.navigate('HomeScreen')}
-                        style={styles.returnButton}
-                    />
+                        activeOpacity={0.8}
+                    >
+                        <Text style={styles.buttonText}>Retour à l'accueil</Text>
+                    </TouchableOpacity>
                 </>
             )}
         </View>
@@ -66,13 +69,40 @@ export default function VsBotGameController({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: colors.background,
         alignItems: "center",
         justifyContent: "center",
         width: '100%',
         height: '100%',
+        padding: spacing.lg
     },
-    paragraph: {
-        fontSize: 16,
+    message: {
+        ...typography.body,
+        color: colors.text.secondary,
+        marginBottom: spacing.lg,
+        textAlign: 'center'
+    },
+    button: {
+        borderRadius: borderRadius.md,
+        padding: spacing.md,
+        minWidth: 200,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: spacing.md,
+        ...Platform.select({
+            ios: shadows.md,
+            android: {
+                elevation: 4
+            },
+            web: shadows.md
+        })
+    },
+    primaryButton: {
+        backgroundColor: colors.primary
+    },
+    buttonText: {
+        ...typography.body,
+        color: colors.text.light,
+        fontWeight: 'bold'
     }
 });
