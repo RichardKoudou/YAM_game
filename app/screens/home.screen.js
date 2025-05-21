@@ -3,10 +3,12 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform } from "react-native";
 import { colors, typography, spacing, borderRadius, shadows } from '../styles/theme';
+import { BackgroundImage } from '../components/background-image/background-image.component';
 
 export default function HomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
+    <BackgroundImage>
+      <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>YAM</Text>
         <Text style={styles.subtitle}>Le jeu de dés classique</Text>
@@ -29,7 +31,8 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.buttonText}>Jouer contre le bot</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      </View>
+    </BackgroundImage>
   );
 }
 

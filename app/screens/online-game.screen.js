@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import { StyleSheet, View, Button, Text } from "react-native";
 import { SocketContext } from '../contexts/socket.context';
 import OnlineGameController from "../controllers/online-game.controller";
+import { BackgroundImage } from '../components/background-image/background-image.component';
 
 
 export default function OnlineGameScreen({ navigation }) {
@@ -11,7 +12,8 @@ export default function OnlineGameScreen({ navigation }) {
     const socket = useContext(SocketContext);
 
     return (
-        <View style={styles.container}>
+        <BackgroundImage>
+            <View style={styles.container}>
             {!socket && (
                 <>
                     <Text style={styles.paragraph}>
@@ -26,7 +28,8 @@ export default function OnlineGameScreen({ navigation }) {
             {socket && (
                 <OnlineGameController navigation={navigation}/>
             )}
-        </View>
+            </View>
+        </BackgroundImage>
     );
 }
 
