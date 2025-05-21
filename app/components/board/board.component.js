@@ -1,7 +1,8 @@
 // app/components/board/board.component.js
 
 import React from "react";
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import { colors, typography, spacing, borderRadius, shadows } from '../../styles/theme';
 import PlayerTimer from './timers/player-timer.component'
 import OpponentTimer from './timers/opponent-timer.component'
 import PlayerDeck from "./decks/player-deck.component";
@@ -14,7 +15,7 @@ import TokenCounter from './tokens/token-counter.component';
 const OpponentInfos = () => {
   return (
     <View style={styles.opponentInfosContainer}>
-      <Text>Opponent infos</Text>
+      <Text style={styles.playerText}>Adversaire</Text>
       <TokenCounter isOpponent={true} />
     </View>
   );
@@ -26,7 +27,7 @@ import PlayerScore from './scores/player-score.component';
 const PlayerInfos = () => {
   return (
     <View style={styles.playerInfosContainer}>
-      <Text>Player Infos</Text>
+      <Text style={styles.playerText}>Vous</Text>
       <TokenCounter isOpponent={false} />
     </View>
   );
@@ -73,27 +74,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: '100%',
+    backgroundColor: colors.background,
+    padding: spacing.sm,
   },
   row: {
     flexDirection: 'row',
     width: '100%',
     borderBottomWidth: 1,
-    borderColor: 'black',
+    borderColor: colors.border,
+    marginVertical: spacing.xs,
   },
   opponentInfosContainer: {
     flex: 7,
     justifyContent: 'center',
     alignItems: 'center',
     borderRightWidth: 1,
-    borderColor: 'black',
-    backgroundColor: "lightgrey"
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: { elevation: 2 },
+      web: shadows.sm
+    })
   },
   opponentTimerScoreContainer: {
     flex: 3,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: "lightgrey"
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    marginLeft: spacing.xs,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: { elevation: 2 },
+      web: shadows.sm
+    })
   },
   opponentScoreContainer: {
     flex: 1,
@@ -119,15 +136,34 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRightWidth: 1,
-    borderColor: 'black',
-    backgroundColor: "lightgrey"
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: { elevation: 2 },
+      web: shadows.sm
+    })
   },
   playerTimerScoreContainer: {
     flex: 3,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: "lightgrey"
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    marginLeft: spacing.xs,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: { elevation: 2 },
+      web: shadows.sm
+    })
+  },
+  playerText: {
+    ...typography.body,
+    color: colors.text.primary,
+    fontWeight: 'bold',
+    marginBottom: spacing.xs
   },
   playerScoreContainer: {
     flex: 1,

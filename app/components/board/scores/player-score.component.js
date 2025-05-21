@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { SocketContext } from '../../../contexts/socket.context';
+import { colors, typography, spacing, borderRadius, shadows } from '../../../styles/theme';
 
 const PlayerScore = () => {
     const socket = useContext(SocketContext);
@@ -18,7 +19,7 @@ const PlayerScore = () => {
 
     return (
       <View style={styles.playerScoreContainer}>
-        <Text>Score: {playerScore}</Text>
+        <Text style={styles.scoreText}>Score: {playerScore}</Text>
       </View>
     );
 };
@@ -28,6 +29,20 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: colors.surface,
+        borderRadius: borderRadius.md,
+        padding: spacing.sm,
+        margin: spacing.xs,
+        ...Platform.select({
+            ios: shadows.sm,
+            android: { elevation: 2 },
+            web: shadows.sm
+        })
+    },
+    scoreText: {
+        ...typography.body,
+        color: colors.text.primary,
+        fontWeight: 'bold'
     }
 });
 
