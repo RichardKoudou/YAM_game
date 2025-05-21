@@ -301,6 +301,16 @@ io.on('connection', socket => {
     newPlayerInQueue(socket);
   });
 
+  socket.on('queue.leave', () => {
+    console.log(`[${socket.id}] Joueur quitte la file d'attente`);
+    // Retirer le joueur de la file d'attente
+    const playerIndex = queue.findIndex(player => player.id === socket.id);
+    if (playerIndex !== -1) {
+      queue.splice(playerIndex, 1);
+      socket.emit('queue.left', { inQueue: false, inGame: false });
+    }
+  });
+
   socket.on('game.vs-bot.start', () => {
     console.log(`[${socket.id}] Démarrage d'une partie contre le bot`);
     createGameVsBot(socket);
