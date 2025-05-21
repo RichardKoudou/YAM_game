@@ -1,8 +1,9 @@
 // app/components/board/choices/choices.component.js
 
 import React, { useState, useContext, useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
 import { SocketContext } from "../../../contexts/socket.context";
+import { colors, typography, spacing, borderRadius, shadows } from '../../../styles/theme';
 
 const Choices = () => {
 
@@ -60,29 +61,37 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-between",
-        paddingHorizontal: 10,
+        padding: spacing.md,
+        backgroundColor: colors.background,
         borderBottomWidth: 1,
-        borderColor: "black",
-        backgroundColor: "lightgrey"
+        borderColor: colors.border
     },
     choiceButton: {
-        backgroundColor: "white",
-        borderRadius: 5,
-        marginVertical: 5,
+        backgroundColor: colors.surface,
+        borderRadius: borderRadius.md,
+        marginVertical: spacing.xs,
+        padding: spacing.sm,
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
-        height: "10%"
+        height: "10%",
+        ...Platform.select({
+            ios: shadows.sm,
+            android: { elevation: 2 },
+            web: shadows.sm
+        })
     },
     selectedChoice: {
-        backgroundColor: "lightgreen",
+        backgroundColor: colors.primary,
     },
     choiceText: {
-        fontSize: 13,
-        fontWeight: "bold",
+        ...typography.body,
+        color: colors.text.primary,
+        fontWeight: "bold"
     },
     disabledChoice: {
         opacity: 0.5,
+        backgroundColor: colors.disabled
     },
 });
 
