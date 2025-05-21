@@ -24,7 +24,8 @@ const OpponentInfos = () => {
 import OpponentScore from './scores/opponent-score.component';
 import PlayerScore from './scores/player-score.component';
 
-const PlayerInfos = () => {
+const 
+PlayerInfos = () => {
   return (
     <View style={styles.playerInfosContainer}>
       <Text style={styles.playerText}>Vous</Text>
@@ -38,24 +39,24 @@ const PlayerInfos = () => {
 const Board = ({ gameViewState}) => {
   return (
     <View style={styles.container}>
-      <View style={[styles.row, { height: '5%' }]}>
+      <View style={[styles.row, { height: '10%' }]}>
         <OpponentInfos />
         <View style={styles.opponentTimerScoreContainer}>
           <OpponentTimer />
           <OpponentScore />
         </View>
       </View>
-      <View style={[styles.row, { height: '25%' }]}>
+      <View style={[styles.row, { height: '10%' }]}>
         <OpponentDeck />
       </View>
-      <View style={[styles.row, { height: '40%' }]}>
+      <View style={[styles.row, { height: '48%' }]}>
         <Grid />
         <Choices />
       </View>
-      <View style={[styles.row, { height: '25%' }]}>
+      <View style={[styles.row, { height: '22%' }]}>
         <PlayerDeck />
       </View>
-      <View style={[styles.row, { height: '5%' }]}>
+      <View style={[styles.row2, { height: '10%' }]}>
         <PlayerInfos />
         <View style={styles.playerTimerScoreContainer}>
           <PlayerTimer />
@@ -75,14 +76,17 @@ const styles = StyleSheet.create({
     width: '90%',
     height: '100%',
     backgroundColor: colors.background,
-    padding: spacing.sm,
+    paddingBottom: '24px',
   },
   row: {
     flexDirection: 'row',
     width: '100%',
-    borderBottomWidth: 10,
-    borderColor: colors.border,
     marginVertical: spacing.xs,
+  },
+  row2: {
+    flexDirection: 'row',
+    width: '100%',
+    paddingBottom: '8px',
   },
   opponentInfosContainer: {
     flex: 7,
@@ -91,11 +95,11 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    borderRadius: borderRadius.md,
+    borderRadius: borderRadius.lg,
     ...Platform.select({
-      ios: shadows.sm,
+      ios: shadows.lg,
       android: { elevation: 2 },
-      web: shadows.sm
+      web: shadows.lg
     })
   },
   opponentTimerScoreContainer: {
@@ -104,12 +108,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.surface,
-    borderRadius: borderRadius.md,
+    borderRadius: borderRadius.lg,
     marginLeft: spacing.xs,
     ...Platform.select({
-      ios: shadows.sm,
+      ios: shadows.lg,
       android: { elevation: 2 },
-      web: shadows.sm
+      web: shadows.lg
     })
   },
   opponentScoreContainer: {
@@ -138,11 +142,11 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    borderRadius: borderRadius.md,
+    borderRadius: borderRadius.lg,
     ...Platform.select({
-      ios: shadows.sm,
+      ios: shadows.lg,
       android: { elevation: 2 },
-      web: shadows.sm
+      web: shadows.lg
     })
   },
   playerTimerScoreContainer: {
@@ -151,21 +155,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.surface,
-    borderRadius: borderRadius.md,
+    borderRadius: borderRadius.lg,
     marginLeft: spacing.xs,
     ...Platform.select({
-      ios: shadows.sm,
+      ios: shadows.lg,
       android: { elevation: 2 },
-      web: shadows.sm
+      web: shadows.lg
     })
   },
   playerText: {
     ...typography.body,
     color: colors.text.primary,
     fontWeight: 'bold',
+    fontSize: 18,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: spacing.xs
+  },
+  counterText: {
+    fontWeight: 'bold',
+    fontSize: 18,
   },
   playerScoreContainer: {
     flex: 1,

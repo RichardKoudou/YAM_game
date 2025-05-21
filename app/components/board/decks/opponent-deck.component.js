@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
-    margin: spacing.sm,
     padding: spacing.md,
     opacity: 0.9,
     ...Platform.select({
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
     width: "80%",
     justifyContent: "space-around",
     flexWrap: "wrap",
-    marginBottom: spacing.md,
+    //marginBottom: spacing.md,
   },
 });
 

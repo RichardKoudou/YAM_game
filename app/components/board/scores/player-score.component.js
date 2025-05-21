@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     scoreText: {
         ...typography.body,
         color: colors.text.primary,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 18,
     }
 });
 

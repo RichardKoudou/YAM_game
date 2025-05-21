@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flexDirection: "column",
         padding: spacing.sm,
-        backgroundColor: colors.surface,
+        //backgroundColor: colors.surface,
     },
     row: {
         flexDirection: "row",
@@ -78,6 +78,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginVertical: spacing.xxs,
+        gap: '4px',
+        marginBottom: '4px',
     },
     cell: {
         flexDirection: "row",
@@ -88,19 +90,21 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderWidth: 1,
         borderColor: colors.border,
-        borderRadius: borderRadius.sm,
+        borderRadius: borderRadius.lg,
         margin: spacing.xxs,
         backgroundColor: colors.surface,
         ...Platform.select({
-            ios: shadows.sm,
+            ios: shadows.lg,
             android: { elevation: 2 },
-            web: shadows.sm
+            web: shadows.lg
         })
     },
     cellText: {
         ...typography.body,
         fontStyle:"bold",
         color: colors.text.primary,
+        fontWeight: "bold",
+        fontSize: 18,
     },
     playerOwnedCell: {
         backgroundColor: colors.success,

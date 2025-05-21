@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: spacing.md,
         backgroundColor: colors.background,
-        borderBottomWidth: 1,
+        //borderBottomWidth: 1,
         borderColor: colors.border
     },
     choiceButton: {

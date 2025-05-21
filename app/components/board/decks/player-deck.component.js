@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
-    margin: spacing.sm,
     padding: spacing.lg,
     ...Platform.select({
       ios: shadows.lg,
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     })
   },
   rollInfoContainer: {
-    marginBottom: spacing.md,
+    marginBottom: 'spacing.md',
     padding: spacing.sm,
     backgroundColor: colors.background,
     borderRadius: borderRadius.md,
@@ -124,16 +123,16 @@ const styles = StyleSheet.create({
     width: "80%",
     justifyContent: "space-around",
     flexWrap: "wrap",
-    marginBottom: spacing.md,
+    margin: '5px',
   },
   rollButton: {
-    width: "40%",
+    width: "15%",
     backgroundColor: colors.primary,
     paddingVertical: spacing.md,
     borderRadius: borderRadius.xl,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: spacing.md,
+    marginBottom: '6px',
     ...Platform.select({
       ios: shadows.md,
       android: { elevation: 4 },

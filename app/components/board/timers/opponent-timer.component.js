@@ -15,7 +15,7 @@ const OpponentTimer = () => {
     }, []);
     return (
       <View style={styles.opponentTimerContainer}>
-        <Text>Timer: {opponentTimer}</Text>
+        <Text style={styles.timerText}>Timer: {opponentTimer}</Text>
       </View>
     );
   };
@@ -26,7 +26,11 @@ const OpponentTimer = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-      }
+      },
+      timerText: {
+        fontWeight: 'bold',
+        fontSize: 18,
+      },
 });
 
 export default OpponentTimer;

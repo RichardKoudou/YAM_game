@@ -31,19 +31,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.surface,
         borderRadius: borderRadius.md,
-        padding: spacing.sm,
-        margin: spacing.xs,
         opacity: 0.9,
-        ...Platform.select({
-            ios: shadows.sm,
-            android: { elevation: 2 },
-            web: shadows.sm
-        })
     },
     scoreText: {
         ...typography.h4,
         color: colors.text.secondary,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 18,
     }
 });
 

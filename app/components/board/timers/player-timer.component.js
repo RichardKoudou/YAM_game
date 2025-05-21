@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     timerCard: {
         backgroundColor: colors.surface,
         borderRadius: borderRadius.md,
-        padding: spacing.sm,
+        //padding: spacing.sm,
         minWidth: 60,
         alignItems: 'center',
         justifyContent: 'center',
@@ -74,7 +74,9 @@ const styles = StyleSheet.create({
     timerText: {
         ...typography.h2,
         color: colors.text.primary,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 18,
     },
     timerWarning: {
         color: colors.danger,
