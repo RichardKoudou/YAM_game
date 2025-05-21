@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%',
+    width: '90%',
     height: '100%',
     backgroundColor: colors.background,
     padding: spacing.sm,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     width: '100%',
-    borderBottomWidth: 1,
+    borderBottomWidth: 10,
     borderColor: colors.border,
     marginVertical: spacing.xs,
   },
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     marginLeft: spacing.xs,
     ...Platform.select({
       ios: shadows.sm,
-      android: { elevation: 5 },
+      android: { elevation: 2 },
       web: shadows.sm
     })
   },
@@ -163,6 +163,8 @@ const styles = StyleSheet.create({
     ...typography.body,
     color: colors.text.primary,
     fontWeight: 'bold',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: spacing.xs
   },
   playerScoreContainer: {

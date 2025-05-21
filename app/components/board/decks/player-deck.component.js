@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     margin: spacing.sm,
-    padding: spacing.md,
+    padding: spacing.lg,
     ...Platform.select({
       ios: shadows.lg,
       android: { elevation: 8 },
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.xl,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: spacing.md,
     ...Platform.select({
       ios: shadows.md,
       android: { elevation: 4 },
