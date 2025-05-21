@@ -1,35 +1,66 @@
-# Socket IO Example
+# Yam  - Jeu en ligne multijoueur
 
-<p>
-  <!-- iOS -->
-  <a href="https://itunes.apple.com/app/apple-store/id982107779">
-    <img alt="Supports Expo iOS" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/iOS-4630EB.svg?style=flat-square&logo=APPLE&labelColor=999999&logoColor=fff" />
-  </a>
-  <!-- Android -->
-  <a href="https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=blankexample">
-    <img alt="Supports Expo Android" longdesc="Supports Expo Android" src="https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff" />
-  </a>
-  <!-- Web -->
-  <a href="https://docs.expo.dev/workflow/web/">
-    <img alt="Supports Expo Web" longdesc="Supports Expo Web" src="https://img.shields.io/badge/web-4630EB.svg?style=flat-square&logo=GOOGLE-CHROME&labelColor=4285F4&logoColor=fff" />
-  </a>
-</p>
+## 🎲 Règles du jeu
 
-This example shows how to connect and interact with socket-io backends.
+Le Yam est un jeu de dés classique où l'objectif est de réaliser des combinaisons pour marquer le plus de points possible.
 
-## 🚀 How to use
+### Déroulement d'une partie
+- Chaque joueur joue avec 5 dés
+- À votre tour, vous avez droit à 3 lancers maximum
+- Après chaque lancer, vous pouvez conserver certains dés et relancer les autres
+- Une fois votre combinaison choisie, les points sont comptabilisés 
 
-### Running the app
+## 🚀 Installation
 
-- Run `yarn` or `npm install`
-- Open `App.js` and change the `socketEndpoint` at the top of the file to point to your endpoint.
-- Open `app` with `yarn start` or `npm run start` to try it out.
+### Prérequis
+- Node.js et npm installés sur votre machine
+- Un terminal ou invite de commande
 
-### Running the server
+### Installation du Frontend (React Native)
+```bash
+# À la racine du projet
+npm install
+```
 
-- `cd` into the `backend` directory and run `yarn` or `npm install`, then run `yarn start` or `npm run start`
-- Install [ngrok](https://ngrok.com/download) and run `ngrok http 3000` and copy the https url that looks something like this `https://f7333e87.ngrok.io`.
+### Installation du Backend
+```bash
+# Dans le dossier backend
+cd backend
+npm install
+```
 
-## 📝 Notes
+## 🎮 Lancement des serveurs
 
-React Native provides a socket-io compatible WebSocket implementation, some people get tripped up on the https requirement so this example helps to clarify how you can get it running.
+### Frontend
+```bash
+# À la racine du projet
+npx expo start
+```
+
+### Backend
+```bash
+# Dans le dossier backend
+cd backend
+npm run start
+```
+
+## 🌟 Fonctionnalités
+
+- Interface utilisateur intuitive et réactive
+- Système de matchmaking en ligne
+- Timer pour chaque tour de jeu
+- Animations des dés
+- Système de score en temps réel
+- Affichage des statistiques de fin de partie
+- 2 modes de jeu : multijoueurs ou contre le bot
+
+## 🎯 Comment jouer
+
+1. Lancez l'application
+2. Attendez qu'un autre joueur rejoigne la partie
+3. À votre tour :
+   - Lancez les dés (jusqu'à 3 fois)
+   - Sélectionnez les dés à conserver
+   - Choisissez votre combinaison
+4. Surveillez votre timer et celui de votre adversaire
+5. Accumulez le plus de points possible pour gagner !
