@@ -17,7 +17,17 @@ export const colors = {
     border: '#DBDBDB',    // Couleur de bordure Instagram
     overlay: 'rgba(0, 0, 0, 0.5)' // Overlay pour les modales
 };
-
+export const useTheme = () => {
+    return {
+        colors,
+        spacing,
+        borderRadius,
+        shadows,
+        typography,
+        buttons,
+        layout
+    };
+};
 export const spacing = {
     xs: 4,
     sm: 8,
