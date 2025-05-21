@@ -1,4 +1,4 @@
-# Yam  - Jeu en ligne multijoueur
+# Yam - Jeu en ligne multijoueur
 
 ## 🎲 Règles du jeu
 
@@ -8,7 +8,47 @@ Le Yam est un jeu de dés classique où l'objectif est de réaliser des combinai
 - Chaque joueur joue avec 5 dés
 - À votre tour, vous avez droit à 3 lancers maximum
 - Après chaque lancer, vous pouvez conserver certains dés et relancer les autres
-- Une fois votre combinaison choisie, les points sont comptabilisés 
+- Une fois votre combinaison choisie, les points sont comptabilisés
+
+## 🛠 Stack Technique
+
+### Frontend
+- **React Native** avec **Expo** pour le développement cross-platform
+- Architecture basée sur les composants React avec gestion d'état locale
+- Système de thème personnalisé pour une UI cohérente
+- Animations natives pour une expérience utilisateur fluide
+
+### Backend
+- **Node.js** avec **Express** pour le serveur HTTP
+- **Socket.IO** pour la communication en temps réel
+- Architecture événementielle pour la gestion des parties
+
+### Communication
+- WebSocket pour les échanges en temps réel
+- Protocole client-serveur optimisé pour les jeux multijoueurs
+- Gestion des événements de jeu (tours, scores, fin de partie)
+
+## 🏗 Architecture du Projet
+
+### Structure Frontend
+```
+app/
+├── components/           # Composants React Native
+│   ├── board/           # Interface de jeu
+│   ├── confetti/        # Animations de victoire
+│   └── game-summary/    # Résumé de partie
+├── contexts/            # Contextes React (Socket, Theme)
+├── styles/              # Thème et styles globaux
+└── services/            # Services (API, WebSocket)
+```
+
+### Structure Backend
+```
+backend/
+├── server.js           # Point d'entrée du serveur
+├── game/               # Logique de jeu
+└── socket/             # Gestionnaires Socket.IO
+```
 
 ## 🚀 Installation
 
